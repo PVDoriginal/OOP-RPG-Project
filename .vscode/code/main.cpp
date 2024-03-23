@@ -8,11 +8,12 @@
 void mainLoop(Character&, Shop&);
 void shopLoop(Character&, Shop&);
 
-void InitiateShop(Shop& shop){
-    shop.AddItem(new Item("small potion", 5, SmallHeal{}));
-    shop.AddItem(new Item("small potion", 5, SmallHeal{}));
-    shop.AddItem(new Item("medium potion", 10, MediumHeal{}));
-    shop.AddItem(new Item("big potion", 15, BigHeal{}));
+void InitiateShop(Shop* shop){
+    shop->AddItem(new Item("Small Potion", 5, SmallHeal{}));
+    shop->AddItem(new Item("Small Potion", 5, SmallHeal{}));
+    shop->AddItem(new Item("Medium Potion", 10, MediumHeal{}));
+    shop->AddItem(new Item("Big Potion", 15, BigHeal{}));
+    shop->AddItem(new Item("Small Helmet", 10, SmallHeadArmor{}));
 }
 
 void buyLoop(Character &player, Shop &shop){
@@ -20,7 +21,9 @@ void buyLoop(Character &player, Shop &shop){
     std::cout << "Item index: ";
     int index;
     std::cin >> index;
-    shop.BuyItem(index, player);
+    Item *item = shop.GetItem(index);
+    //item->Use(player);
+    if(item != nullptr) player.AddItem(item);
     system("pause");
     return mainLoop(player, shop);
 }
@@ -46,33 +49,35 @@ void shopLoop(Character &player, Shop &shop){
     }
 }
 
-void useItemLoop(Character &player){
-
-
+void useItemLoop(Character &player, Shop &shop){
+    std::cout << "-----------------------\n";
+    player.ShowUsableItems();
+    std::cout << "Item index: ";
+    int index;
+    std::cin >> index;
+    Item* item = player.GetItem(index);
+    if(item != nullptr) item->Use(player);
+    system("pause");
+    return mainLoop(player, shop);
 }
-void equipItemLoop(Character &player){
-
-
-}
-
-void characterLoop(Character &player){
+void characterLoop(Character &player, Shop &shop){
     std::cout << "-----------------------\n";
     player.CheckInventory();
+    player.CheckStats();
     std::cout << "\n";
     std::cout << "Choose an action:\n";
     std::cout << "1. Use item.\n";
-    std::cout << "2. Equip item.\n";
-    std::cout << "3. Leave.\n\n";
+    std::cout << "2. Leave.\n\n";
 
     int command; 
     std::cin >> command;
 
     switch (command){
-        case 1: return useItemLoop(player); 
-        case 2: return equipItemLoop(player); 
+        case 1: return useItemLoop(player, shop); 
+        case 2: return mainLoop(player, shop); 
         default:
             std::cout << "Unidentified command\n\n";
-            return characterLoop(player);
+            return characterLoop(player, shop);
     }
 }
 
@@ -88,7 +93,7 @@ void mainLoop(Character &player, Shop &shop){
 
     switch (command){
         case 1: return shopLoop(player, shop); 
-        case 2: return characterLoop(player); 
+        case 2: return characterLoop(player, shop); 
         default:
             std::cout << "Unidentified command\n\n";
             return mainLoop(player, shop);
@@ -98,7 +103,10 @@ void mainLoop(Character &player, Shop &shop){
 int main(){
     Character player;
     Shop shop;
-    InitiateShop(shop);
+
+    //player.AddItem(new Item("Medium Potion", 10, MediumHeal{}));
+
+    InitiateShop(&shop);
     std::cout << "Your adventure has begun.\n\n";
     system("pause");
     mainLoop(player, shop);

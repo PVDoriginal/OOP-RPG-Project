@@ -5,39 +5,26 @@
 #include "../Headers/character.h"
 #include "../Headers/shop.h"
 
-void Shop::AddItem(Item* item){Items.push_back(item);}
-void Shop::BuyItem(const std::string &name, Character &character){
-    for(int i = 0; i < Items.size(); ++i)
-        if(Items[i]->GetName() == name){
-
-            if(Items[i]->GetPrice() > character.GetMoney()){
-                std::cout << "Can't afford '" << name << "'\n\n";
-                return;
-            }
-
-            std::cout << "Bought '" << name << "'!\n\n";
-            character.AddItem(Items[i]);
-            Item* item = Items[i];
-            Items.erase(Items.begin()+i);
-            return;
-        }
-    std::cout << "Couldn't find '" << name << "'\n\n";
-    return;
-}
-void Shop::BuyItem(const int &index, Character &character){
+void Shop::AddItem(Item* item) { Items.push_back(item); }
+Item* Shop::GetItem(int index){
     if(index-1 >= Items.size()){
         std::cout << "There are only " << Items.size() << " items!\n";
-        return;
+        return nullptr;
     }
-    if(Items[index-1]->GetPrice() > character.GetMoney()){
-        std::cout << "You do not have enough money!\n";
-        return;
-    }
-
     std::cout << "Bought '" << Items[index-1]->GetName() << "'!\n";
-    character.AddItem(Items[index-1]);
+
+    //Item* item = new Item(*Items[index-1]);
+    
+    //Item* oldItem = Items[index-1];
+    //Items.erase(Items.begin()+index-1);
+    //delete(oldItem);
+    
+    //Item* item = std::move(Items[index-1]);
+
     Item* item = Items[index-1];
     Items.erase(Items.begin()+index-1);
+
+    return item;
 }
 void Shop::CheckItems() const {
     std::cout << "Shop items: \n";

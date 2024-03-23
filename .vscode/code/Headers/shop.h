@@ -11,7 +11,6 @@ class Shop{
 
     public:
         void AddItem(Item*);
-        void BuyItem(const std::string&, Character&);
-        void BuyItem(const int&, Character&);
+        Item* GetItem(int);
         void CheckItems()const;
 };
