@@ -24,8 +24,24 @@ void Shop::BuyItem(const std::string &name, Character &character){
     std::cout << "Couldn't find '" << name << "'\n\n";
     return;
 }
+void Shop::BuyItem(const int &index, Character &character){
+    if(index-1 >= Items.size()){
+        std::cout << "There are only " << Items.size() << " items!\n";
+        return;
+    }
+    if(Items[index-1]->GetPrice() > character.GetMoney()){
+        std::cout << "You do not have enough money!\n";
+        return;
+    }
+
+    std::cout << "Bought '" << Items[index-1]->GetName() << "'!\n";
+    character.AddItem(Items[index-1]);
+    Item* item = Items[index-1];
+    Items.erase(Items.begin()+index-1);
+}
 void Shop::CheckItems() const {
     std::cout << "Shop items: \n";
-    for(auto item : Items) std::cout << "- " << *item;
-    std::cout << "\n\n";
+    for(int i = 0; i < Items.size(); ++i)
+        std::cout << i+1 << ". " << *Items[i] << "\n";
+    std::cout << "\n";
 }

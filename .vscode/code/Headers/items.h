@@ -10,15 +10,19 @@ class AbstractItemUseBehavior{
 };
 
 class Item{
-    protected:
+    private:
         std::string Name;
         double Price;
         const AbstractItemUseBehavior &UseBehavior;
+        bool CombatOnly = false;
+        bool IsEquippable = false;
+        bool isEquipped = false;
 
     public:
         Item(std::string name, int price, const AbstractItemUseBehavior &use): Name(name), Price(price), UseBehavior(use){};
         void Use(Character&);
         void HalvePrice();
+        void NullifyPrice();
 
         std::string GetName()const;
         int GetPrice()const;
