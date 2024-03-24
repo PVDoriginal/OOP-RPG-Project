@@ -193,7 +193,6 @@ void mainLoop(Character &player, Shop &shop){
 
 void Test1();
 void Test2();
-void Test3();
 
 int main(){
     srand(time(0));
