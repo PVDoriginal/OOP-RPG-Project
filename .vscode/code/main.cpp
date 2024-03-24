@@ -8,6 +8,7 @@
 void mainLoop(Character&, Shop&);
 void shopLoop(Character&, Shop&);
 
+
 void InitiateShop(Shop* shop){
     shop->AddItem(new Item("Small Potion", 5, SmallHeal{}));
     shop->AddItem(new Item("Small Potion", 5, SmallHeal{}));
@@ -21,8 +22,7 @@ void buyLoop(Character &player, Shop &shop){
     std::cout << "Item index: ";
     int index;
     std::cin >> index;
-    Item *item = shop.GetItem(index);
-    //item->Use(player);
+    Item *item = shop.GetItem(index, player);
     if(item != nullptr) player.AddItem(item);
     system("pause");
     return mainLoop(player, shop);
@@ -105,6 +105,7 @@ int main(){
     Shop shop;
 
     //player.AddItem(new Item("Medium Potion", 10, MediumHeal{}));
+    //shop.AddItem(new Item("Small Potion", 5, SmallHeal{}));
 
     InitiateShop(&shop);
     std::cout << "Your adventure has begun.\n\n";

@@ -11,6 +11,6 @@ class Shop{
 
     public:
         void AddItem(Item*);
-        Item* GetItem(int);
+        Item* GetItem(int, const Character&);
         void CheckItems()const;
 };
