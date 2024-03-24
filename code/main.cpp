@@ -5,9 +5,19 @@
 #include "Headers/character.h"
 #include "Headers/items.h"
 #include "Headers/shop.h"
+#include "Headers/enemy.h"
 
 void mainLoop(Character&, Shop&);
 void shopLoop(Character&, Shop&);
+
+std::vector<Enemy*> GenerateEnemies(){
+    std::vector<Enemy*> enemies;
+    enemies.push_back(new Enemy("Ghoul", 7, 5, 10, {new Item("Small Potion", 0, new SmallHeal)}, {new BasicMeleeAttack}));
+    enemies.push_back(new Enemy("Flesh Golem", 10, 5, 15, {new Item("Medium Potion", 0, new MediumHeal)}, {new BasicMeleeAttack, new HeavyMeleeAttack}));
+    enemies.push_back(new Enemy("Flesh Golem", 10, 5, 15, {new Item("Medium Potion", 0, new MediumHeal)}, {new BasicMeleeAttack, new HeavyMeleeAttack}));
+    enemies.push_back(new Enemy("Mage", 25, 7, 20, {new Item("Medium Potion", 0, new MediumHeal), new Item("Big Potion", 0, new BigHeal)}, {new BasicMeleeAttack, new BasicRangedAttack, new HeavyRangedAttack}));
+    return enemies;
+}
 
 
 void InitiateShop(Shop* shop){
@@ -17,6 +27,7 @@ void InitiateShop(Shop* shop){
     shop->AddItem(new Item("Big Potion", 15, new BigHeal));
     shop->AddItem(new Item("Ugly Hat", 10, new SmallHeadArmor));
     shop->AddItem(new Item("Ugly Shirt", 15, new SmallBodyArmor));
+    shop->AddItem(new Item("Knife", 15, new MediumDamage));
 }
 
 void buyLoop(Character &player, Shop &shop){
@@ -83,6 +94,80 @@ void characterLoop(Character &player, Shop &shop){
     }
 }
 
+bool fightEnemy(Character &player, Enemy &enemy){
+    std::cout << "Fight with " << enemy.GetName() << " started!\n";
+    while(true){
+        std::cout << "-----------------------\n";
+        std::cout<<"\n";
+        player.CheckStats();
+        std::cout << "Enemy HP: " << enemy << "\n\n";
+        std::cout << "-----------------------\n";
+        std::cout << "Choose an action:\n";
+        std::cout << "1. Attack.\n";
+        std::cout << "2. Use item.\n";
+
+        int command; 
+        std::cin >> command;
+        double damage = player.GetRandomDamage();
+
+        switch(command){
+            case 1: 
+                std::cout << "Player hits " << enemy.GetName() << " for " << damage << "HP!\n";
+                enemy.Hit(damage);
+                break;
+            case 2:
+                std::cout << "-----------------------\n";
+                player.ShowUsableItems(true);
+                std::cout << "Item index: ";
+                int index;
+                std::cin >> index;
+                Item* item = player.GetItem(index, true);
+                if(item != nullptr) item->Use(player);
+                break;
+        }
+        if(enemy.GetHealth() <= 0) return true;
+        enemy.Attack(player);
+        system("pause");
+        if(player.GetHealth() <= 0) return false;
+    }
+}
+
+void exploreLoop(Character &player, Shop &shop){
+    std::cout << "-----------------------\n";
+    std::vector<Enemy*> enemies; 
+    while(true){
+        if(enemies.size() == 0) enemies = GenerateEnemies();
+        int randIndex = rand()%enemies.size();
+        Enemy* enemy = enemies[randIndex];
+        enemies.erase(enemies.begin() + randIndex);
+
+        bool won = fightEnemy(player, *enemy);
+        Item* item = enemy->GetDrop();
+        int money = enemy->GetMoney();
+        delete(enemy);
+        if(!won) return;
+
+        std::cout << "Gained a " << item->GetName() << " and " << money << "$!\n\n";
+        
+        player.AddItem(item);
+
+        std::cout << "-----------------------\n";
+        std::cout << "Choose an action:\n";
+        std::cout << "1. Keep exploring.\n";
+        std::cout << "2. Go back.\n";
+        
+        int command; 
+        std::cin >> command;
+
+        switch(command){
+            case 1: break;
+            case 2: return mainLoop(player, shop);
+            default: break;
+        }
+    }
+}
+
+
 void mainLoop(Character &player, Shop &shop){
     std::cout << "-----------------------\n";
     std::cout << "Choose an action:\n";
@@ -97,6 +182,7 @@ void mainLoop(Character &player, Shop &shop){
     switch (command){
         case 1: return shopLoop(player, shop); 
         case 2: return characterLoop(player, shop); 
+        case 3: return exploreLoop(player, shop);
         case 4: return;
         default:
             std::cout << "Unidentified command\n\n";
@@ -105,6 +191,7 @@ void mainLoop(Character &player, Shop &shop){
 }
 
 int main(){
+    srand(time(0));
     Character player;
     Shop shop;
     InitiateShop(&shop);

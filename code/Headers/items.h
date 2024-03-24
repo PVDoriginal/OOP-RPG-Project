@@ -55,3 +55,7 @@ class SmallBodyArmor: public AbstractItemUseBehavior{
     public:
         void Use(Character&)const;
 };
+class MediumDamage : public AbstractItemUseBehavior{
+    public:
+        void Use(Character&)const;
+};

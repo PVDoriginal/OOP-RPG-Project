@@ -42,3 +42,8 @@ void SmallBodyArmor::Use(Character &character) const {
     character.SetBodyArmor(30);
     std::cout << "New Body Armor Protection: 30!\n";
 }
+
+void MediumDamage::Use(Character &character) const {
+    character.SetDamage(10);
+    std::cout << "New DMG value: 10!\n";
+}

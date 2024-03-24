@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstdlib> 
 #include "../Headers/character.h"
 #include "../Headers/items.h"
 
@@ -12,7 +13,7 @@ std::ostream& operator<<(std::ostream& os, const Character& character){
     return os;
 }
 
-void Character::Heal(double amount) { Health = std::min(Health + amount, MaxHealth); }
+void Character::Heal(int amount) { Health = std::min(Health + amount, MaxHealth); }
 void Character::SetHeadArmor(double amount) { HeadArmor = amount; }
 void Character::SetBodyArmor(double amount) { BodyArmor = amount; }
 void Character::AddItem(Item* item, bool free){
@@ -38,6 +39,8 @@ void Character::CheckStats() const{
     std::cout << *this;
 }
 
+void Character::AddMoney(double amount) { Money += amount; }
+
 void Character::ShowUsableItems(bool inCombat) const{
     std::cout << "Usable items: \n";
     for(int i = 0, nr = 0; i < Inventory.size(); ++i)
@@ -55,8 +58,21 @@ Item* Character::GetItem(int index, bool inCombat){
     return nullptr;
 }
 
+void Character::Hit(double damage){
+    damage = damage * 1/2 * (1 - HeadArmor/100) + damage * 1/2 * (1 - HeadArmor/100);
+    Health -= int(damage);
+}
+
+void Character::SetDamage(double amount) { Damage = amount; }
+
 void Character::CheckMoney()const{
     std::cout << "You have " << Money << "$\n";
 }
+
+double Character::GetRandomDamage() const {
+    return int(Damage + rand()%7 - 3);
+}
+
 int Character::GetHealth()const { return Health; }
 int Character::GetMoney()const { return Money; }
+double Character::GetDamage()const { return Damage; }
