@@ -26,3 +26,9 @@ void Shop::CheckItems() const {
         std::cout << i+1 << ". " << *Items[i] << "\n";
     std::cout << "\n";
 }
+
+std::ostream& operator<<(std::ostream& os, const Shop& shop) {
+    for(auto item : shop.Items)
+        os << "- " << item->GetName() << "$\n";  
+    return os;
+}

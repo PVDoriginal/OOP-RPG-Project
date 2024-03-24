@@ -2,6 +2,7 @@
 #include<string>
 #include<vector>
 #include<stdlib.h>
+#include<cassert>
 #include "Headers/character.h"
 #include "Headers/items.h"
 #include "Headers/shop.h"
@@ -95,6 +96,7 @@ void characterLoop(Character &player, Shop &shop){
 }
 
 bool fightEnemy(Character &player, Enemy &enemy){
+    std::cout << "-----------------------\n";
     std::cout << "Fight with " << enemy.GetName() << " started!\n";
     while(true){
         std::cout << "-----------------------\n";
@@ -133,7 +135,6 @@ bool fightEnemy(Character &player, Enemy &enemy){
 }
 
 void exploreLoop(Character &player, Shop &shop){
-    std::cout << "-----------------------\n";
     std::vector<Enemy*> enemies; 
     while(true){
         if(enemies.size() == 0) enemies = GenerateEnemies();
@@ -190,12 +191,40 @@ void mainLoop(Character &player, Shop &shop){
     }
 }
 
+void Test1();
+void Test2();
+void Test3();
+
 int main(){
     srand(time(0));
+    Test1();
+    Test2();
+    system("CLS");
+
     Character player;
     Shop shop;
     InitiateShop(&shop);
     std::cout << "Your adventure has begun.\n\n";
     system("pause");
     mainLoop(player, shop);
+}
+
+
+// Test if using a potion brings the player back to full health after taking damage
+void Test1(){
+    Character player;
+    player.Hit(10);
+    Item potion = Item("medium potion", 0, new MediumHeal);
+    potion.Use(player);
+    assert(player.GetHealth() == 100);
+}
+
+// Test adding, buying, and using an item from the shop 
+void Test2(){
+    Character player;
+    Shop shop;
+    shop.AddItem(new Item("Knife", 15, new MediumDamage)); // sets the player damage to 10
+    Item* item = shop.GetItem(1, player);
+    item->Use(player);
+    assert(player.GetDamage() == 10);
 }

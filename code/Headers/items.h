@@ -19,6 +19,7 @@ class Item{
 
     public:
         Item(std::string name, int price, AbstractItemUseBehavior *use, bool combatOnly = false, bool reusable = false): Name(name), Price(price), UseBehavior(use), CombatOnly(combatOnly), Reusable(reusable){};
+        Item(const Item& item): Name(item.Name), Price(item.Price), UseBehavior(item.UseBehavior), CombatOnly(item.CombatOnly), Reusable(item.Reusable){};
         ~Item() {
             delete(UseBehavior);
             std::cout << "Destroyed " << Name << ".\n"; 
@@ -33,6 +34,7 @@ class Item{
         bool IsReusable()const;
 
         friend std::ostream& operator<<(std::ostream&, const Item&);
+        void operator=(const Item&); 
 };
 
 class SmallHeal: public AbstractItemUseBehavior{

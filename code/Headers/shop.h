@@ -17,4 +17,6 @@ class Shop{
         void AddItem(Item*);
         Item* GetItem(int, const Character&);
         void CheckItems()const;
+        
+        friend std::ostream& operator<<(std::ostream&, const Shop&);
 };

@@ -22,6 +22,14 @@ std::ostream& operator<<(std::ostream& os, const Item& item) {
     return os;
 }
 
+void Item::operator=(const Item& item){
+    this->Name = item.Name;
+    this->Price = item.Price;
+    this->CombatOnly = item.CombatOnly;
+    this->Reusable = item.Reusable;
+    this->UseBehavior = item.UseBehavior;
+}
+
 void SmallHeal::Use(Character &character) const { 
     character.Heal(30);
     std::cout << "Healed 30HP!\n";
