@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<stdlib.h>
 #include "Headers/character.h"
 #include "Headers/items.h"
 #include "Headers/shop.h"
@@ -10,11 +11,12 @@ void shopLoop(Character&, Shop&);
 
 
 void InitiateShop(Shop* shop){
-    shop->AddItem(new Item("Small Potion", 5, SmallHeal{}));
-    shop->AddItem(new Item("Small Potion", 5, SmallHeal{}));
-    shop->AddItem(new Item("Medium Potion", 10, MediumHeal{}));
-    shop->AddItem(new Item("Big Potion", 15, BigHeal{}));
-    shop->AddItem(new Item("Small Helmet", 10, SmallHeadArmor{}));
+    shop->AddItem(new Item("Small Potion", 5, new SmallHeal));
+    shop->AddItem(new Item("Small Potion", 5, new SmallHeal));
+    shop->AddItem(new Item("Medium Potion", 10, new MediumHeal));
+    shop->AddItem(new Item("Big Potion", 15, new BigHeal));
+    shop->AddItem(new Item("Ugly Hat", 10, new SmallHeadArmor));
+    shop->AddItem(new Item("Ugly Shirt", 15, new SmallBodyArmor));
 }
 
 void buyLoop(Character &player, Shop &shop){
@@ -86,7 +88,8 @@ void mainLoop(Character &player, Shop &shop){
     std::cout << "Choose an action:\n";
     std::cout << "1. Check Shop.\n";
     std::cout << "2. Check Character.\n";
-    std::cout << "3. Explore.\n\n";
+    std::cout << "3. Explore.\n";
+    std::cout << "4. Exit.\n\n";
 
     int command; 
     std::cin >> command;
@@ -94,6 +97,7 @@ void mainLoop(Character &player, Shop &shop){
     switch (command){
         case 1: return shopLoop(player, shop); 
         case 2: return characterLoop(player, shop); 
+        case 4: return;
         default:
             std::cout << "Unidentified command\n\n";
             return mainLoop(player, shop);
@@ -103,10 +107,6 @@ void mainLoop(Character &player, Shop &shop){
 int main(){
     Character player;
     Shop shop;
-
-    //player.AddItem(new Item("Medium Potion", 10, MediumHeal{}));
-    //shop.AddItem(new Item("Small Potion", 5, SmallHeal{}));
-
     InitiateShop(&shop);
     std::cout << "Your adventure has begun.\n\n";
     system("pause");

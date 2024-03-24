@@ -5,11 +5,8 @@
 #include "../Headers/items.h"
 
 void Item::Use(Character &character){
-    UseBehavior.Use(character);
-    if(!Reusable){
-        character.RemoveItem(this); 
-        delete(this);
-    }
+    UseBehavior->Use(character);
+    if(!Reusable) character.RemoveItem(this); 
 }
 void Item::HalvePrice() { Price /= 2; }
 void Item::NullifyPrice() { Price = 0; }
@@ -17,6 +14,7 @@ void Item::NullifyPrice() { Price = 0; }
 std::string Item::GetName() const { return Name; }
 int Item::GetPrice() const { return Price; }
 bool Item::IsOnlyForCombat() const { return CombatOnly; }
+bool Item::IsReusable() const { return Reusable; }
 
 std::ostream& operator<<(std::ostream& os, const Item& item) {
     os << item.Name;
@@ -39,4 +37,8 @@ void BigHeal::Use(Character &character) const {
 void SmallHeadArmor::Use(Character &character) const {
     character.SetHeadArmor(30);
     std::cout << "New Head Armor Protection: 30!\n";
+}
+void SmallBodyArmor::Use(Character &character) const {
+    character.SetBodyArmor(30);
+    std::cout << "New Body Armor Protection: 30!\n";
 }

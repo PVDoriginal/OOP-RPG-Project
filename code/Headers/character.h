@@ -11,11 +11,18 @@ class Character{
         double HeadArmor = 0;
         double BodyArmor = 0;
         double Damage = 5;
-        int Money = 10;
+        int Money = 100;
 
     public:
+
+        ~Character(){
+            for(auto item : Inventory)
+                delete(item);
+        }
+
         void Heal(double);
         void SetHeadArmor(double);
+        void SetBodyArmor(double);
         void AddItem(Item*, bool=false);
         void RemoveItem(Item*);
         Item* GetItem(int, bool=false);

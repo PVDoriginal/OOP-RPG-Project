@@ -5,7 +5,7 @@
 #include "../Headers/items.h"
 
 std::ostream& operator<<(std::ostream& os, const Character& character){
-    os << character.Health << "HP | ";
+    os << character.Health << "/" << character.MaxHealth << "HP | ";
     os << character.HeadArmor << " Head ARM | ";
     os << character.BodyArmor << " Body ARM | ";
     os << character.Damage << " DMG\n";
@@ -14,6 +14,7 @@ std::ostream& operator<<(std::ostream& os, const Character& character){
 
 void Character::Heal(double amount) { Health = std::min(Health + amount, MaxHealth); }
 void Character::SetHeadArmor(double amount) { HeadArmor = amount; }
+void Character::SetBodyArmor(double amount) { BodyArmor = amount; }
 void Character::AddItem(Item* item, bool free){
     if(!free) Money -= item->GetPrice();
     item->NullifyPrice();
@@ -50,6 +51,7 @@ Item* Character::GetItem(int index, bool inCombat){
             nr++;
             if(nr == index) return Inventory[i];
         }
+    std::cout << "Couldn't find item.\n";
     return nullptr;
 }
 
