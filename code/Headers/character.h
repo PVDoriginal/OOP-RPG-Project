@@ -11,7 +11,7 @@ class Character{
         double HeadArmor = 0;
         double BodyArmor = 0;
         double Damage = 5;
-        int Money = 100;
+        int Money = 50;
 
     public:
 

@@ -55,3 +55,8 @@ void MediumDamage::Use(Character &character) const {
     character.SetDamage(10);
     std::cout << "New DMG value: 10!\n";
 }
+
+void WoodSell::Use(Character &character) const {
+    character.AddMoney(30);
+    std::cout << "You sold the wood for 30$\n";
+}

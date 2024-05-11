@@ -61,3 +61,7 @@ class MediumDamage : public AbstractItemUseBehavior{
     public:
         void Use(Character&)const;
 };
+class WoodSell: public AbstractItemUseBehavior{
+    public:
+        void Use(Character&)const;
+};

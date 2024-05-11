@@ -59,3 +59,7 @@ class HeavyRangedAttack : public AbstractEnemyAttack{
     public:
         void Attack(Enemy&, Character&)const;
 };
+class TreeAttack : public AbstractEnemyAttack{
+    public:
+        void Attack(Enemy&, Character&)const;
+};

@@ -6,7 +6,7 @@
 #include "../Headers/shop.h"
 
 void Shop::AddItem(Item* item) { Items.push_back(item); }
-Item* Shop::GetItem(int index, const Character& character){
+Item* Shop::GetItem(const int &index, const Character& character){
     if(index-1 >= Items.size()){
         std::cout << "There are only " << Items.size() << " items!\n";
         return nullptr;

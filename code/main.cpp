@@ -17,6 +17,8 @@ std::vector<Enemy*> GenerateEnemies(){
     enemies.push_back(new Enemy("Flesh Golem", 10, 5, 15, {new Item("Medium Potion", 0, new MediumHeal)}, {new BasicMeleeAttack, new HeavyMeleeAttack}));
     enemies.push_back(new Enemy("Flesh Golem", 10, 5, 15, {new Item("Medium Potion", 0, new MediumHeal)}, {new BasicMeleeAttack, new HeavyMeleeAttack}));
     enemies.push_back(new Enemy("Mage", 25, 7, 20, {new Item("Medium Potion", 0, new MediumHeal), new Item("Big Potion", 0, new BigHeal)}, {new BasicMeleeAttack, new BasicRangedAttack, new HeavyRangedAttack}));
+    enemies.push_back(new Enemy("Tree", 80, 0, 5, {new Item("Wood", 0, new WoodSell)}, {new TreeAttack}));
+    enemies.push_back(new Enemy("Tree", 80, 0, 5, {new Item("Wood", 0, new WoodSell)}, {new TreeAttack}));
     return enemies;
 }
 
@@ -150,6 +152,7 @@ void exploreLoop(Character &player, Shop &shop){
 
         std::cout << "Gained a " << item->GetName() << " and " << money << "$!\n\n";
         
+        // add money to player
         player.AddItem(item);
 
         std::cout << "-----------------------\n";
@@ -207,7 +210,6 @@ int main(){
     system("pause");
     mainLoop(player, shop);
 }
-
 
 // Test if using a potion brings the player back to full health after taking damage
 void Test1(){

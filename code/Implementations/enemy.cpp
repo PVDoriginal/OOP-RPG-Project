@@ -59,3 +59,6 @@ void HeavyRangedAttack::Attack(Enemy& enemy, Character& character)const{
     character.Hit(damage);
     std::cout << enemy.GetName() << " shoots a heavy projectile, hitting the player for " << damage << "HP!\n";
 }
+void TreeAttack::Attack(Enemy& enemy, Character& character) const {
+    std::cout << "The tree rustles its leaves...\n";
+}

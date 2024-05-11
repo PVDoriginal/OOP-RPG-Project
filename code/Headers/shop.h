@@ -15,7 +15,7 @@ class Shop{
                 delete(item);
         }
         void AddItem(Item*);
-        Item* GetItem(int, const Character&);
+        Item* GetItem(const int&, const Character&);
         void CheckItems()const;
         
         friend std::ostream& operator<<(std::ostream&, const Shop&);
