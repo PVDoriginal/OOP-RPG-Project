@@ -13,6 +13,8 @@ std::ostream& operator<<(std::ostream& os, const Character& character){
     return os;
 }
 
+int Character::nr_of_players = 0;
+
 void Character::Heal(int amount) { Health = std::min(Health + amount, MaxHealth); }
 void Character::SetHeadArmor(double amount) { HeadArmor = amount; }
 void Character::SetBodyArmor(double amount) { BodyArmor = amount; }
@@ -70,8 +72,10 @@ void Character::CheckMoney()const{
 }
 
 double Character::GetRandomDamage() const {
-    return int(Damage + rand()%7 - 3);
+    return int(Damage * DamageMulti + rand()%7 - 3);
 }
+
+void Character::Type(){std::cout << "This is a character!\n";}
 
 int Character::GetHealth()const { return Health; }
 int Character::GetMoney()const { return Money; }

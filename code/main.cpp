@@ -8,6 +8,11 @@
 #include "Headers/shop.h"
 #include "Headers/enemy.h"
 
+class WrongInput : public std::exception {
+    public:
+        char* what(){return "Invalid Input";}
+};
+
 void mainLoop(Character&, Shop&);
 void shopLoop(Character&, Shop&);
 
@@ -91,9 +96,7 @@ void characterLoop(Character &player, Shop &shop){
     switch (command){
         case 1: return useItemLoop(player, shop); 
         case 2: return mainLoop(player, shop); 
-        default:
-            std::cout << "Unidentified command\n\n";
-            return characterLoop(player, shop);
+        default: throw WrongInput();
     }
 }
 
@@ -147,6 +150,7 @@ void exploreLoop(Character &player, Shop &shop){
         bool won = fightEnemy(player, *enemy);
         Item* item = enemy->GetDrop();
         int money = enemy->GetMoney();
+        player.AddMoney(money);
         delete(enemy);
         if(!won) return;
 
@@ -185,17 +189,52 @@ void mainLoop(Character &player, Shop &shop){
 
     switch (command){
         case 1: return shopLoop(player, shop); 
-        case 2: return characterLoop(player, shop); 
+        case 2: 
+            while(true) {
+                try{
+                    return characterLoop(player, shop);
+                    break;
+                }
+                catch(WrongInput e){
+                    std::cout << e.what() << "\n";
+                }
+            }
         case 3: return exploreLoop(player, shop);
         case 4: return;
-        default:
-            std::cout << "Unidentified command\n\n";
-            return mainLoop(player, shop);
+        default: throw WrongInput();
     }
 }
 
 void Test1();
 void Test2();
+
+Character* ChooseCharacter(){
+    std::cout << "-----------------------\n";
+    std::cout << "Choose a character type:\n";
+    std::cout << "1. Basic.\n";
+    std::cout << "2. Armored.\n";
+    std::cout << "3. Rogue.\n";
+
+    int command; 
+    std::cin >> command;
+
+    Character* player;
+    //upcasts!
+    switch (command){
+        case 1:
+            player = new BasicCharacter();
+            return player;
+        case 2:
+            player = new ArmoredCharacter();
+            return player;
+        case 3:
+            player = new RogueCharacter();
+            return player;;
+        default:
+            std::cout << "Unidentified command\n\n";
+            return ChooseCharacter();
+    }
+}
 
 int main(){
     srand(time(0));
@@ -203,17 +242,27 @@ int main(){
     Test2();
     system("CLS");
 
-    Character player;
-    Shop shop;
+    Character* player = ChooseCharacter();
+
+    Shop shop; 
     InitiateShop(&shop);
     std::cout << "Your adventure has begun.\n\n";
     system("pause");
-    mainLoop(player, shop);
+
+    while(true){
+        try{
+            mainLoop(*player, shop);
+            break;
+        }
+        catch (WrongInput e){
+            std::cout << e.what() << "\n";
+        }
+    }
 }
 
 // Test if using a potion brings the player back to full health after taking damage
 void Test1(){
-    Character player;
+    BasicCharacter player;
     player.Hit(10);
     Item potion = Item("medium potion", 0, new MediumHeal);
     potion.Use(player);
@@ -222,7 +271,7 @@ void Test1(){
 
 // Test adding, buying, and using an item from the shop 
 void Test2(){
-    Character player;
+    BasicCharacter player;
     Shop shop;
     shop.AddItem(new Item("Knife", 15, new MediumDamage)); // sets the player damage to 10
     Item* item = shop.GetItem(1, player);

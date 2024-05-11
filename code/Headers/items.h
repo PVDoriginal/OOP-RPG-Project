@@ -18,6 +18,7 @@ class Item{
         bool Reusable;
 
     public:
+        // dynamic dispatch
         Item(std::string name, int price, AbstractItemUseBehavior *use, bool combatOnly = false, bool reusable = false): Name(name), Price(price), UseBehavior(use), CombatOnly(combatOnly), Reusable(reusable){};
         Item(const Item& item): Name(item.Name), Price(item.Price), UseBehavior(item.UseBehavior), CombatOnly(item.CombatOnly), Reusable(item.Reusable){};
         ~Item() {

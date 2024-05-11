@@ -21,6 +21,7 @@ class Enemy{
         std::vector<AbstractEnemyAttack*> Attacks;
 
     public:
+        // dynamic
         Enemy(std::string name, int health, double damage, int dropMoney, std::vector<Item*> drops, std::vector<AbstractEnemyAttack*> attacks):
             Name(name), Health(health), Damage(damage), DropMoney(dropMoney), Drops(drops), Attacks(attacks){}
         ~Enemy(){
