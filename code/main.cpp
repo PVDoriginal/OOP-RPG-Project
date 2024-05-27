@@ -143,6 +143,7 @@ bool Compare(const Enemy* a, const Enemy* b){
 void exploreLoop(Character &player, Shop &shop){
     std::vector<Enemy*> enemies; 
     sort(enemies.begin(), enemies.end(), Compare);
+    
     while(true){
         if(enemies.size() == 0) enemies = GenerateEnemies();
         int randIndex = rand()%enemies.size();
