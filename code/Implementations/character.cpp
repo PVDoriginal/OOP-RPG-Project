@@ -1,9 +1,11 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
 #include <cstdlib> 
 #include "../Headers/character.h"
 #include "../Headers/items.h"
+#include "../Headers/utility.h"
 
 std::ostream& operator<<(std::ostream& os, const Character& character){
     os << character.Health << "/" << character.MaxHealth << "HP | ";
@@ -71,9 +73,7 @@ void Character::CheckMoney()const{
     std::cout << "You have " << Money << "$\n";
 }
 
-double Character::GetRandomDamage() const {
-    return int(Damage * DamageMulti + rand()%7 - 3);
-}
+double Character::GetRandomDamage() const { return Singleton<double>::getInstance()->GetRandomDamage(Damage, DamageMulti); }
 
 void Character::Type(){std::cout << "This is a character!\n";}
 

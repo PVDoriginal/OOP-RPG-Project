@@ -3,10 +3,13 @@
 #include<vector>
 #include<stdlib.h>
 #include<cassert>
+#include<memory>
+#include<algorithm>
 #include "Headers/character.h"
 #include "Headers/items.h"
 #include "Headers/shop.h"
 #include "Headers/enemy.h"
+#include "Headers/utility.h"
 
 class WrongInput : public std::exception {
     public:
@@ -72,13 +75,7 @@ void shopLoop(Character &player, Shop &shop){
 
 void useItemLoop(Character &player, Shop &shop){
     std::cout << "-----------------------\n";
-    player.ShowUsableItems();
-    std::cout << "Item index: ";
-    int index;
-    std::cin >> index;
-    Item* item = player.GetItem(index);
-    if(item != nullptr) item->Use(player);
-    system("pause");
+    Singleton<double>::getInstance()->UseItem(player, shop);
     return mainLoop(player, shop);
 }
 void characterLoop(Character &player, Shop &shop){
@@ -128,7 +125,7 @@ bool fightEnemy(Character &player, Enemy &enemy){
                 std::cout << "Item index: ";
                 int index;
                 std::cin >> index;
-                Item* item = player.GetItem(index, true);
+                std::unique_ptr<Item> item(player.GetItem(index, true));
                 if(item != nullptr) item->Use(player);
                 break;
         }
@@ -139,8 +136,13 @@ bool fightEnemy(Character &player, Enemy &enemy){
     }
 }
 
+bool Compare(const Enemy* a, const Enemy* b){
+    return a->GetName() < b->GetName();
+}
+
 void exploreLoop(Character &player, Shop &shop){
     std::vector<Enemy*> enemies; 
+    sort(enemies.begin(), enemies.end(), Compare);
     while(true){
         if(enemies.size() == 0) enemies = GenerateEnemies();
         int randIndex = rand()%enemies.size();
@@ -150,13 +152,12 @@ void exploreLoop(Character &player, Shop &shop){
         bool won = fightEnemy(player, *enemy);
         Item* item = enemy->GetDrop();
         int money = enemy->GetMoney();
-        player.AddMoney(money);
         delete(enemy);
         if(!won) return;
 
         std::cout << "Gained a " << item->GetName() << " and " << money << "$!\n\n";
         
-        // add money to player
+        player.AddMoney(money);
         player.AddItem(item);
 
         std::cout << "-----------------------\n";
